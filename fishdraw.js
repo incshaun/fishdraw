@@ -781,15 +781,17 @@ function poissondisk(W, H, r, samples) {
 
 function draw_svg(polylines){
   let o = `<svg xmlns="http://www.w3.org/2000/svg" width="520" height="320">`
-  o += `<rect x="0" y="0" width="520" height="320" fill="floralwhite"/><rect x="10" y="10" width="500" height="300" stroke="black" stroke-width="1" fill="none"/><path stroke="black" stroke-width="1" fill="none" stroke-linecap="round" stroke-linejoin="round" d="`
+  o += `<rect x="10" y="10" width="500" height="300" stroke="black" stroke-width="1" fill="none"/>`
   for (let i = 0; i < polylines.length; i++){
+    o += `\n<path stroke="black" stroke-width="1" fill="rgb(${i},255,0)" stroke-linecap="round" stroke-linejoin="round" d="`
     o += '\nM ';
     for (let j = 0; j < polylines[i].length; j++){
       let [x,y] = polylines[i][j];
       o += `${(~~((x+10)*100)) /100} ${(~~((y+10)*100)) /100} `;
     }
+    o += `\n"/>`
   }
-  o += `\n"/></svg>`
+  o += `</svg>`
   return o;
 }
 
@@ -1062,7 +1064,7 @@ function fish_body_a(curve0,curve1,scale_scale,pattern_func){
   let o1 = clip_multi(o0,outline3);
   o1.false = o1.false.filter(x=>rand()<0.6);
   let o = [];
-  o.push(curve0,curve1.slice().reverse(),...o1.true,...o1.false);
+  o.push(curve0.concat (curve1.slice().reverse()),...o1.true,...o1.false);
   return o;
 }
 
@@ -1104,7 +1106,7 @@ function fish_body_b(curve0,curve1,scale_scale,pattern_func){
     }
   }
   let o = [];
-  o.push(curve0,curve1.slice().reverse(),...o1);
+  o.push(curve0.concat (curve1.slice().reverse()),...o1);
   return o;
 }
 
@@ -1169,8 +1171,7 @@ function fish_body_c(curve0,curve1,scale_scale){
   
 
   let o = [];
-  
-  o.push(curve0,curve1.slice().reverse(),...o0);
+  o.push(curve0.concat (curve1.slice().reverse()),...o0);
   return o;
 }
 
@@ -1214,12 +1215,9 @@ function fish_body_d(curve0,curve1,scale_scale){
   let sh = vein_shape(outline1);
 
   let o = [];
-  o.push(curve0,curve1.slice().reverse(),...o1,...sh);
+  o.push(curve0.concat (curve1.slice().reverse()),...o1,...sh);
   return o;
 }
-
-
-
 
 function fin_a(curve,ang0,ang1,func,clip_root=false,curvature0=0,curvature1=0,softness=10){
   let angs = [];
@@ -2074,7 +2072,7 @@ function fish(arg){
     ;[c4,f4] = fin_a(f4_curve,-0.6,0.6,t=>(  (1-Math.sin(t*PI)**0.4*0.55)*arg.tail_length  ),1);
   }
   // f4 = clip_multi(f4,trsl_poly(outline,-1,0)).false;
-  bd = clip_multi(bd,trsl_poly(c4,1,0)).false;
+//  bd = clip_multi(bd,trsl_poly(c4,1,0)).false;
 
   f4 = clip_multi(f4,c1).false;
 
