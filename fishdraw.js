@@ -781,9 +781,14 @@ function poissondisk(W, H, r, samples) {
 
 function draw_svg(polylines){
   let o = `<svg xmlns="http://www.w3.org/2000/svg" width="520" height="320">`
-  o += `<rect x="10" y="10" width="500" height="300" stroke="black" stroke-width="1" fill="none"/>`
+  let colrb = rand () * 128;
+  let colgb = rand () * 128;
+  let colbb = rand () * 128;
   for (let i = 0; i < polylines.length; i++){
-    o += `\n<path stroke="black" stroke-width="1" fill="rgb(${i},255,0)" stroke-linecap="round" stroke-linejoin="round" d="`
+    let colra = rand () * 128;
+    let colga = rand () * 128;
+    let colba = rand () * 128;
+    o += `\n<path stroke="black" stroke-width="1" fill="rgb(${colra + colrb},${colga + colgb},${colba + colbb})" stroke-linecap="round" stroke-linejoin="round" d="`
     o += '\nM ';
     for (let j = 0; j < polylines[i].length; j++){
       let [x,y] = polylines[i][j];
@@ -1994,7 +1999,7 @@ function fish(arg){
     f1_curve = resample(f1_curve,4);
     ;[c1,f1] = fin_b(f1_curve,f1_a0,f1_a1,f1_func,0.3);
   }
-  bd = clip_multi(bd,c1).false;
+//  bd = clip_multi(bd,c1).false;
 
 
   let f2_curve;
@@ -2103,7 +2108,7 @@ function fish(arg){
   }else{
     ;[cf,fh] = fish_head(50-arg.head_length,150+arg.nose_height,...curve0[5],...curve1[6],arg);
   }
-  bd = clip_multi(bd,cf).false;
+//  bd = clip_multi(bd,cf).false;
   
   sh = clip_multi(sh,cf).false;
   sh = clip_multi(sh,c1).false;
@@ -2163,10 +2168,12 @@ function reframe(polylines,pad=20,text=null){
       polylines[i][j] = [x,y];
     }
   }
-  let [tw,tp] = put_text(text);
-  tp = tp.map(p=>scl_poly(shr_poly(p,-0.3),0.3,0.3));
-  tw *= 0.3;
-  polylines.push(...tp.map(p=>trsl_poly(p,250-tw/2,300-pad+5)));
+  
+//   // Add the name.
+//   let [tw,tp] = put_text(text);
+//   tp = tp.map(p=>scl_poly(shr_poly(p,-0.3),0.3,0.3));
+//   tw *= 0.3;
+//   polylines.push(...tp.map(p=>trsl_poly(p,250-tw/2,300-pad+5)));
   return polylines;
 }
 
